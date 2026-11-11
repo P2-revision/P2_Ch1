@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小二常識科：才富的理財大冒險（專為小學生設計）</title>
+  <style>
+    :root {
+      --primary: #FF7043;
+      --primary-dark: #D84315;
+      --secondary: #4CAF50;
+      --secondary-dark: #2E7D32;
+      --accent: #FFCA28;
+      --accent-dark: #FFA000;
+      --sky: #42A5F5;
+      --sky-dark: #1976D2;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background: #FFF9C4;
+      background-image: 
+        radial-gradient(#FFE082 15%, transparent 16%),
+        radial-gradient(#FFE082 15%, transparent 16%);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      font-family: "Chalkboard SE", "Comic Sans MS", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+      color: var(--text);
+    }
+
+    /* 主遊戲卡片 */
+    .game-window {
+      background: var(--card-bg);
+      border-radius: 36px;
+      box-shadow: 0 16px 0px #F57F17, 0 24px 30px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 680px;
+      padding: 30px 24px;
+      position: relative;
+      border: 6px solid #FFA000;
+      overflow: hidden;
+    }
+
+    /* 頂部資訊欄 */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      gap: 10px;
+    }
+
+    .badge-capsule {
+      background: #E1F5FE;
+      color: var(--sky-dark);
+      border: 3px solid #81D4FA;
+      font-weight: 900;
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .coin-meter {
+      background: #FFF8E1;
+      color: #E65100;
+      border: 3px solid #FFD54F;
+      font-weight: 900;
+      font-size: 20px;
+      padding: 8px 18px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 0 #FFE082;
+    }
+
+    .sound-btn {
+      background: #F3E5F5;
+      border: 3px solid #CE93D8;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s ease;
+      box-shadow: 0 4px 0 #BA68C8;
+    }
+
+    .sound-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #BA68C8;
+    }
+
+    /* 糖果進度條 */
+    .progress-outer {
+      background: #EEEEEE;
+      height: 22px;
+      border-radius: 20px;
+      border: 3px solid #E0E0E0;
+      margin-bottom: 20px;
+      padding: 2px;
+      overflow: hidden;
+    }
+
+    .progress-inner {
+      background: linear-gradient(90deg, #FFB74D, #FF7043);
+      height: 100%;
+      width: 0%;
+      border-radius: 16px;
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* 角色立繪與情境卡 */
+    .story-card {
+      background: #F1F8E9;
+      border: 4px dashed #81C784;
+      border-radius: 24px;
+      padding: 16px 20px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .story-avatar {
+      font-size: 52px;
+      flex-shrink: 0;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .story-bubble {
+      font-size: 19px;
+      line-height: 1.5;
+      color: #1B5E20;
+      font-weight: bold;
+    }
+
+    .tts-speaker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFF;
+      border: 2px solid #81C784;
+      border-radius: 16px;
+      padding: 4px 12px;
+      font-size: 15px;
+      color: #2E7D32;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 3px 0 #A5D6A7;
+    }
+
+    .tts-speaker:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #A5D6A7;
+    }
+
+    /* 題目大字標題 */
+    .question-title {
+      font-size: 23px;
+      font-weight: 900;
+      line-height: 1.4;
+      margin-bottom: 18px;
+      color: #37474F;
+      text-align: left;
+    }
+
+    /* 專屬視覺輔助區（為小二學生展示貨品、八達通等） */
+    .visual-stage {
+      background: #FFFDE7;
+      border: 3px solid #FFF59D;
+      border-radius: 20px;
+      padding: 14px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .shelf-items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .shelf-item-card {
+      background: #FFFFFF;
+      border: 3px solid #FFE082;
+      border-radius: 16px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      font-size: 16px;
+      box-shadow: 0 4px 0 #FFD54F;
+    }
+
+    .shelf-item-icon {
+      font-size: 32px;
+    }
+
+    .shelf-item-price {
+      display: inline-block;
+      background: #FF5252;
+      color: #FFF;
+      font-size: 14px;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 8px;
+      margin-top: 4px;
+    }
+
+    /* 超大點擊選項按鈕 */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .big-choice-btn {
+      background: #FFFFFF;
+      border: 4px solid #B0BEC5;
+      border-radius: 22px;
+      padding: 16px 20px;
+      font-size: 20px;
+      font-weight: 800;
+      color: #37474F;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 6px 0 #90A4AE;
+      transition: all 0.15s ease;
+      line-height: 1.4;
+    }
+
+    .big-choice-btn:hover:not(:disabled) {
+      background: #FFFDE7;
+      border-color: #FFA000;
+      box-shadow: 0 6px 0 #FF8F00;
+      transform: translateY(-2px);
+    }
+
+    .big-choice-btn:active:not(:disabled) {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #90A4AE;
+    }
+
+    .choice-tag {
+      background: #ECEFF1;
+      color: #455A64;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      flex-shrink: 0;
+      border: 2px solid #CFD8DC;
+    }
+
+    /* 正確與錯誤狀態 */
+    .big-choice-btn.is-correct {
+      background: #E8F5E9 !important;
+      border-color: #4CAF50 !important;
+      color: #1B5E20 !important;
+      box-shadow: 0 6px 0 #2E7D32 !important;
+    }
+
+    .big-choice-btn.is-correct .choice-tag {
+      background: #4CAF50;
+      color: #FFF;
+      border-color: #2E7D32;
+    }
+
+    .big-choice-btn.is-wrong {
+      background: #FFEBEE !important;
+      border-color: #EF5350 !important;
+      color: #B71C1C !important;
+      box-shadow: 0 6px 0 #C62828 !important;
+      animation: shake 0.4s ease;
+    }
+
+    .big-choice-btn.is-wrong .choice-tag {
+      background: #EF5350;
+      color: #FFF;
+      border-color: #C62828;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    /* 回饋提示盒 */
+    .mascot-feedback {
+      background: #E0F2F1;
+      border: 4px solid #80CBC4;
+      border-radius: 20px;
+      padding: 16px 20px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 19px;
+      line-height: 1.5;
+      box-shadow: 0 4px 0 #4DB6AC;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mascot-feedback.success {
+      background: #E8F5E9;
+      border-color: #81C784;
+      box-shadow: 0 4px 0 #66BB6A;
+      color: #1B5E20;
+    }
+
+    .mascot-feedback.hint {
+      background: #FFF3E0;
+      border-color: #FFB74D;
+      box-shadow: 0 4px 0 #FFA726;
+      color: #E65100;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* 鮮豔立體大按鈕 */
+    .giant-action-btn {
+      width: 100%;
+      background: #4CAF50;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 26px;
+      padding: 18px 24px;
+      font-size: 24px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #2E7D32, 0 12px 20px rgba(76, 175, 80, 0.3);
+      transition: all 0.15s ease;
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .giant-action-btn:hover {
+      background: #43A047;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 #2E7D32, 0 14px 24px rgba(76, 175, 80, 0.4);
+    }
+
+    .giant-action-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #2E7D32;
+    }
+
+    .giant-action-btn.orange {
+      background: #FF7043;
+      box-shadow: 0 8px 0 #D84315, 0 12px 20px rgba(255, 112, 67, 0.3);
+    }
+
+    .giant-action-btn.orange:hover {
+      background: #F4511E;
+      box-shadow: 0 10px 0 #D84315;
+    }
+
+    .giant-action-btn.orange:active {
+      box-shadow: 0 2px 0 #D84315;
+    }
+
+    /* 結算證書卡片 */
+    .result-sheet {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .medal-banner {
+      font-size: 80px;
+      animation: bounce 1.8s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-16px); }
+      60% { transform: translateY(-8px); }
+    }
+
+    .cert-box {
+      background: #FFFDE7;
+      border: 5px dashed #FFB300;
+      border-radius: 28px;
+      padding: 22px 18px;
+      margin: 18px 0;
+    }
+
+    .stars-display {
+      font-size: 42px;
+      letter-spacing: 6px;
+      margin: 10px 0;
+    }
+
+    /* 彩帶 Canvas */
+    #confetti-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* 手機畫面適應 */
+    @media (max-width: 480px) {
+      .game-window {
+        padding: 22px 16px;
+        border-radius: 28px;
+      }
+      .question-title {
+        font-size: 20px;
+      }
+      .big-choice-btn {
+        font-size: 17px;
+        padding: 14px 16px;
+      }
+      .shelf-items {
+        grid-template-columns: 1fr;
+      }
+      .giant-action-btn {
+        font-size: 21px;
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="game-window">
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- ================= 1. 開始遊戲畫面 ================= -->
+  <div id="screen-intro">
+    <div style="text-align: center; margin-bottom: 12px;">
+      <div style="font-size: 72px; margin-bottom: 6px;">👦🪙🐼</div>
+      <h1 style="color: #E65100; font-size: 30px; font-weight: 900; margin-bottom: 8px;">才富的理財大冒險</h1>
+      <p style="font-size: 18px; color: #5D4037; font-weight: bold; line-height: 1.5;">
+        小學二年級常識科：第 1 課「善用金錢」溫習遊戲
+      </p>
+    </div>
+
+    <div class="story-card" style="background: #E8F5E9; border-color: #81C784;">
+      <div class="story-avatar">🎒</div>
+      <div class="story-bubble">
+        小朋大家好！我是<strong>才富</strong>。<br>
+        今天我要學習怎樣做個<strong>精明理財小達人</strong>！<br>
+        你能幫我完成 9 個生活挑戰嗎？
+      </div>
+    </div>
+
+    <div style="background: #FFF8E1; border: 3px solid #FFE082; border-radius: 20px; padding: 14px 18px; margin-bottom: 16px;">
+      <div style="font-weight: 900; font-size: 18px; color: #F57F17; margin-bottom: 6px;">⭐ 遊戲小規則：</div>
+      <div style="font-size: 17px; line-height: 1.6; color: #5D4037;">
+        1. 仔細閱讀題目（可以點 🔊 聽朗讀喔！）<br>
+        2. 答對可贏取 <strong>閃亮金幣 🪙</strong><br>
+        3. 答錯也不用怕，會有溫馨提示幫你再試一次！
+      </div>
+    </div>
+
+    <button class="giant-action-btn orange" onclick="game.start()">
+      開始冒險啦！ 🚀
+    </button>
+  </div>
+
+  <!-- ================= 2. 答題關卡畫面 ================= -->
+  <div id="screen-game" class="hidden">
+    <div class="top-bar">
+      <div class="badge-capsule" id="quest-tag">關卡 1 / 9</div>
+      <div class="coin-meter">🪙 <span id="coin-count">0</span></div>
+      <button class="sound-btn" onclick="game.toggleAudio()" id="audio-toggle-btn" title="開關音效">🔊</button>
+    </div>
+
+    <div class="progress-outer">
+      <div class="progress-inner" id="progress-bar"></div>
+    </div>
+
+    <!-- 角色對話與語音按鈕 -->
+    <div class="story-card">
+      <div class="story-avatar" id="mascot-face">👦</div>
+      <div>
+        <div class="story-bubble" id="scenario-bubble">才富說：...</div>
+        <button class="tts-speaker" onclick="game.readCurrentQuestion()">
+          🔊 點我讀題目給你看
+        </button>
+      </div>
+    </div>
+
+    <!-- 視覺展示區（例如商場貨架） -->
+    <div class="visual-stage hidden" id="visual-stage"></div>
+
+    <div class="question-title" id="question-text">題目載入中...</div>
+
+    <!-- 大選項列表 -->
+    <div class="options-list" id="choices-box"></div>
+
+    <!-- 即時反饋提示 -->
+    <div class="mascot-feedback hidden" id="feedback-box">
+      <div style="font-size: 32px;" id="feedback-icon">🌟</div>
+      <div id="feedback-text">很好！</div>
+    </div>
+
+    <!-- 下一步大按鈕 -->
+    <button class="giant-action-btn hidden" id="next-btn" onclick="game.handleNext()">
+      下一關挑戰 ➔
+    </button>
+  </div>
+
+  <!-- ================= 3. 通關結算畫面 ================= -->
+  <div id="screen-result" class="hidden">
+    <div class="result-sheet">
+      <div class="medal-banner">🏆</div>
+      <h2 style="font-size: 30px; color: #2E7D32; font-weight: 900; margin-bottom: 6px;">太棒了！挑戰成功！</h2>
+      <p style="font-size: 19px; color: #555; font-weight: bold;">你已經順利學會「善用金錢」的好方法！</p>
+
+      <div class="cert-box">
+        <div style="font-size: 22px; font-weight: 900; color: #E65100;">🌟 精明理財小達人證書 🌟</div>
+        <div class="stars-display" id="final-stars">⭐⭐⭐</div>
+        <div style="font-size: 22px; font-weight: 900; margin: 10px 0; color: #37474F;">
+          獲得金幣：<span style="color: #F57F17;" id="final-coins">50</span> 🪙
+        </div>
+        <p style="font-size: 17px; line-height: 1.6; color: #5D4037;" id="final-message">
+          你懂得感恩父母辛苦工作、用錢不超支、懂得儲蓄和記帳，真是聰明又懂事！
+        </p>
+      </div>
+
+      <button class="giant-action-btn" onclick="game.restart()">
+        再玩一次 🔄
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================== 1. 簡易 Web Audio 音效產生器（無需外掛） ==================== */
+class SoundPlayer {
+  constructor() {
+    this.ctx = null;
+    this.enabled = true;
+  }
+
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) this.ctx = new AudioCtx();
+    }
+    if (this.ctx && this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
+  }
+
+  playPop() {
+    if (!this.enabled || !this.ctx) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.08);
+  }
+
+  playCorrect() {
+    if (!this.enabled || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + i * 0.09);
+      gain.gain.setValueAtTime(0.25, now + i * 0.09);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + 0.2);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + i * 0.09);
+      osc.stop(now + i * 0.09 + 0.22);
+    });
+  }
+
+  playWrong() {
+    if (!this.enabled || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(260, now);
+    osc.frequency.linearRampToValueAtTime(140, now + 0.25);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  playFanfare() {
+    if (!this.enabled || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    const notes = [523, 659, 783, 1046, 783, 1046];
+    const times = [0, 0.15, 0.3, 0.45, 0.65, 0.85];
+    notes.forEach((freq, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + times[idx]);
+      gain.gain.setValueAtTime(0.25, now + times[idx]);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + times[idx] + 0.3);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now + times[idx]);
+      osc.stop(now + times[idx] + 0.32);
+    });
+  }
+}
+
+/* ==================== 2. 小二常識科題庫（嚴格本於課本章節） ==================== */
+const QUESTIONS = [
+  {
+    id: 1,
+    avatar: "👩‍👦",
+    character: "才富與媽媽",
+    scenario: "媽媽月初給了才富 100 元零用錢。金錢是父母辛勞工作賺來的。",
+    visual: null,
+    question: "才富接過零用錢時，最有禮貌、最好的做法是甚麼？",
+    choices: [
+      { text: "嫌錢不夠多，嘟起嘴巴轉身跑開", isCorrect: false },
+      { text: "雙手接過，並親切地說：「謝謝媽媽！」", isCorrect: true },
+      { text: "隨手丟在沙發上不管它", isCorrect: false }
+    ],
+    hint: "金錢是父母辛苦工作賺取的，我們收到零用錢一定要懂得感恩並道謝喔！",
+    praise: "好懂事！雙手接過並說謝謝，懂得珍惜父母辛苦工作賺來的錢！✨"
+  },
+  {
+    id: 2,
+    avatar: "🐷💰",
+    character: "才富的儲蓄罐",
+    scenario: "才富想為家人買生日禮物，他平時把用剩的零用錢放進儲蓄罐裏。",
+    visual: `
+      <div style="font-weight:900; color:#2E7D32; font-size:18px; text-align:center; background:#E8F5E9; padding:10px; border-radius:14px;">
+        🪙 每天儲蓄一點點小錢 ➔ 慢慢累積成大錢！
+      </div>
+    `,
+    question: "養成「儲蓄（存錢）」的好習慣，最主要的優點是甚麼？",
+    choices: [
+      { text: "只要存錢就能立刻買光玩具店所有東西", isCorrect: false },
+      { text: "只有大人才能存錢，小朋友不可以存錢", isCorrect: false },
+      { text: "幫助我們「積少成多」，儲夠錢達成目標", isCorrect: true }
+    ],
+    hint: "每天存一點點小錢，時間久了就會變成大錢喔！",
+    praise: "答對了！儲蓄可以積少成多，幫助我們實現心願與目標！🐷💰"
+  },
+  {
+    id: 3,
+    avatar: "📝",
+    character: "才富的小記帳本",
+    scenario: "才富每天都會在小本子上記下自己收到的零用錢和買東西花掉的錢。",
+    visual: `
+      <div style="font-weight:900; color:#0277BD; font-size:17px; text-align:center; background:#E1F5FE; padding:10px; border-radius:14px;">
+        📖 記帳小本子：記錄「日期」、「收入」、「支出」與「餘額」
+      </div>
+    `,
+    question: "養成「記錄開支（記帳）」的好習慣，主要有甚麼好處？",
+    choices: [
+      { text: "能清楚提醒自己金錢「花了在甚麼地方」", isCorrect: true },
+      { text: "只要記帳，錢包裏就會自動變出更多鈔票", isCorrect: false },
+      { text: "這只是給老師檢查功課，沒有任何好處", isCorrect: false }
+    ],
+    hint: "記下每一筆花費，才不會忘記錢跑到哪裡去囉！",
+    praise: "太棒了！記錄開支能提醒我們每一筆金錢花在哪裡，不再糊裡糊塗！📝"
+  },
+  {
+    id: 4,
+    avatar: "🤔",
+    character: "才富在禮物店",
+    scenario: "才富儲蓄了 $125 現金。禮物店裏有一隻非常漂亮的「大熊貓玩偶」，標價是 $250。",
+    visual: `
+      <div style="display:flex; justify-content:center; align-items:center; gap:20px; font-size:18px; font-weight:900;">
+        <span style="color:#2E7D32;">👛 才富擁有：$125</span>
+        <span style="font-size:26px;">VS</span>
+        <span style="color:#C62828;">🧸 玩偶售價：$250</span>
+      </div>
+    `,
+    question: "為什麼才富「絕對不應該」選擇買這隻 $250 的大熊貓玩偶？",
+    choices: [
+      { text: "因為大熊貓玩偶長得不好看", isCorrect: false },
+      { text: "因為 $250 超出了才富所擁有的 $125 現金上限（超支）", isCorrect: true },
+      { text: "因為買東西不用管自己手上有沒有足夠的錢", isCorrect: false }
+    ],
+    hint: "我們買東西一定要限於自己所擁有的現金，不能買超出預算的東西喔！",
+    praise: "答得真好！買東西絕不能超過自己擁有的錢，才富只有 $125，買 $250 就會超支了！💡"
+  },
+  {
+    id: 5,
+    avatar: "🐼",
+    character: "才富為妹妹選禮物",
+    scenario: "才富手上有 $125 現金，妹妹生日「需要一個新錢包」且非常喜歡大熊貓。",
+    visual: `
+      <div style="font-weight:900; color:#E65100; margin-bottom:8px; font-size:17px;">
+        👛 才富的錢包裡有：<strong>現金 $125</strong>
+      </div>
+      <div class="shelf-items">
+        <div class="shelf-item-card">
+          <div class="shelf-item-icon">🐼🧸</div>
+          <div><strong>大熊貓玩偶</strong><br><span class="shelf-item-price">$250</span></div>
+        </div>
+        <div class="shelf-item-card">
+          <div class="shelf-item-icon">🐼🧢</div>
+          <div><strong>小熊貓帽子</strong><br><span class="shelf-item-price">$99</span></div>
+        </div>
+        <div class="shelf-item-card">
+          <div class="shelf-item-icon">🐰👛</div>
+          <div><strong>小白兔錢包</strong><br><span class="shelf-item-price">$60</span></div>
+        </div>
+        <div class="shelf-item-card">
+          <div class="shelf-item-icon">🐼👛</div>
+          <div><strong>大熊貓圖案錢包</strong><br><span class="shelf-item-price">$80</span></div>
+        </div>
+      </div>
+    `,
+    question: "才富應該買哪一樣禮物送給妹妹最合適、最有價值？",
+    choices: [
+      { text: "$99 小熊貓帽子（妹妹不缺帽子）", isCorrect: false },
+      { text: "$60 藍色小白兔錢包（妹妹不喜歡兔子）", isCorrect: false },
+      { text: "$80 粉紅色大熊貓圖案錢包（符合需要又在預算內）", isCorrect: true }
+    ],
+    hint: "想一想：妹妹最『需要』甚麼？她又喜歡甚麼動物呢？而且價錢不能超過 125 元喔！",
+    praise: "太精明了！大熊貓錢包既合乎妹妹『需要錢包』的心願，又在 125 元預算內，最實用又有價值！🎒"
+  },
+  {
+    id: 6,
+    avatar: "💳",
+    character: "才富的八達通",
+    scenario: "妹妹平時會帶八達通卡上學乘車和買小物品。",
+    visual: `
+      <div style="font-size:18px; font-weight:900; color:#0277BD; background:#E1F5FE; padding:10px; border-radius:14px; text-align:center;">
+        💳 八達通含有儲值金錢，要好好保護
+      </div>
+    `,
+    question: "平時我們應該怎樣妥善保管自己的八達通卡？",
+    choices: [
+      { text: "妥善存放在錢包內，避免丟失", isCorrect: true },
+      { text: "隨手丟在課桌上或夾在課本裏", isCorrect: false },
+      { text: "拿在手上邊走邊甩動玩耍", isCorrect: false }
+    ],
+    hint: "八達通裡面存有金錢，像現金一樣重要，要好好收在固定的地方喔！",
+    praise: "好習慣！將八達通妥善收在錢包內，才不會隨便弄丟！💳"
+  },
+  {
+    id: 7,
+    avatar: "👧💳",
+    character: "妹妹在車站",
+    scenario: "妹妹在自動售賣機連續拍八達通買零食，到了港鐵入閘機時，機器突然響起紅燈顯示「餘額不足」。",
+    visual: `
+      <div style="font-size:20px; font-weight:900; color:#D32F2F; background:#FFEBEE; padding:10px; border-radius:14px; text-align:center;">
+        ⚠️ 八達通顯示：【餘額不足！請增值】
+      </div>
+    `,
+    question: "妹妹犯了甚麼錯誤？平時拍卡消費時應該注意甚麼？",
+    choices: [
+      { text: "八達通可以無限次拍卡，不用管還有多少錢", isCorrect: false },
+      { text: "每次拍卡時都要注意「卡內餘額」，切勿胡亂花費", isCorrect: true },
+      { text: "只要卡片沒損壞就可以一直刷卡購物", isCorrect: false }
+    ],
+    hint: "八達通裡的也是金錢，用完就沒有了！拍卡時要注意螢幕顯示甚麼？",
+    praise: "答對了！八達通要好好保管，每次拍卡都要看清楚餘額，切勿胡亂花費！⭐"
+  },
+  {
+    id: 8,
+    avatar: "📱",
+    character: "智慧生活體驗",
+    scenario: "現代人在商店或網上付款好方便，不用拿出現金！課本介紹了「電子錢包」。",
+    visual: `
+      <div style="font-size:18px; font-weight:900; color:#4A148C; background:#F3E5F5; padding:10px; border-radius:14px; text-align:center;">
+        📱 電子錢包：無需實體鈔票的方便付款工具
+      </div>
+    `,
+    question: "甚麼是「電子錢包」？",
+    choices: [
+      { text: "一個裡面裝了電池的實體塑膠錢包", isCorrect: false },
+      { text: "一個只能用來玩電玩遊戲的應用程式", isCorrect: false },
+      { text: "透過手機、電腦等裝置來進行付款的便利工具", isCorrect: true }
+    ],
+    hint: "電子錢包是用電子裝置（例如手機）來付錢的便利工具喔！",
+    praise: "完全正確！電子錢包是透過手機或電腦等裝置付款的現代科技工具！📱"
+  },
+  {
+    id: 9,
+    avatar: "🛍️",
+    character: "認識電子錢包",
+    scenario: "課本介紹了幾種在香港非常常見的電子錢包支付工具。",
+    visual: `
+      <div style="font-size:24px; display:flex; justify-content:center; gap:14px; font-weight:bold;">
+        <span>📱 微信支付</span>
+        <span>🔹 支付寶</span>
+        <span>💳 PayMe</span>
+        <span>🔸 Tap & Go</span>
+      </div>
+    `,
+    question: "以下哪一組全都是課本提到的「電子錢包」？",
+    choices: [
+      { text: "支付寶、微信支付、PayMe、Tap & Go", isCorrect: true },
+      { text: "存摺簿、儲蓄罐、八達通卡、現金券", isCorrect: false },
+      { text: "遊戲機、玩具車、圖書、鉛筆盒", isCorrect: false }
+    ],
+    hint: "課本中提到的手機支付工具名稱有哪些呢？",
+    praise: "大滿貫！支付寶、微信支付、PayMe 和 Tap & Go 全都是課本介紹的電子錢包！🏆"
+  }
+];
+
+/* ==================== 3. 遊戲邏輯控制 ==================== */
+class QuizGame {
+  constructor() {
+    this.audio = new SoundPlayer();
+    this.currentIndex = 0;
+    this.coins = 0;
+    this.streak = 0;
+    this.answeredCurrent = false;
+
+    // DOM 元素
+    this.screenIntro = document.getElementById('screen-intro');
+    this.screenGame = document.getElementById('screen-game');
+    this.screenResult = document.getElementById('screen-result');
+
+    this.questTag = document.getElementById('quest-tag');
+    this.coinCount = document.getElementById('coin-count');
+    this.progressBar = document.getElementById('progress-bar');
+    this.mascotFace = document.getElementById('mascot-face');
+    this.scenarioBubble = document.getElementById('scenario-bubble');
+    this.visualStage = document.getElementById('visual-stage');
+    this.questionText = document.getElementById('question-text');
+    this.choicesBox = document.getElementById('choices-box');
+    this.feedbackBox = document.getElementById('feedback-box');
+    this.feedbackIcon = document.getElementById('feedback-icon');
+    this.feedbackText = document.getElementById('feedback-text');
+    this.nextBtn = document.getElementById('next-btn');
+
+    this.finalStars = document.getElementById('final-stars');
+    this.finalCoins = document.getElementById('final-coins');
+    this.finalMessage = document.getElementById('final-message');
+  }
+
+  start() {
+    this.audio.init();
+    this.audio.playPop();
+    this.currentIndex = 0;
+    this.coins = 0;
+    this.streak = 0;
+    this.updateCoinDisplay();
+
+    this.screenIntro.classList.add('hidden');
+    this.screenResult.classList.add('hidden');
+    this.screenGame.classList.remove('hidden');
+
+    this.loadQuestion();
+  }
+
+  loadQuestion() {
+    const q = QUESTIONS[this.currentIndex];
+    this.answeredCurrent = false;
+
+    // 進度更新
+    const progressPercent = ((this.currentIndex) / QUESTIONS.length) * 100;
+    this.progressBar.style.width = progressPercent + '%';
+    this.questTag.innerText = `關卡 ${this.currentIndex + 1} / ${QUESTIONS.length}`;
+
+    // 情境與角色
+    this.mascotFace.innerText = q.avatar;
+    this.scenarioBubble.innerHTML = `<strong>${q.character}</strong>：${q.scenario}`;
+
+    // 視覺展示
+    if (q.visual) {
+      this.visualStage.innerHTML = q.visual;
+      this.visualStage.classList.remove('hidden');
+    } else {
+      this.visualStage.innerHTML = '';
+      this.visualStage.classList.add('hidden');
+    }
+
+    // 題目
+    this.questionText.innerText = q.question;
+
+    // 選項
+    this.choicesBox.innerHTML = '';
+    const letters = ['A', 'B', 'C'];
+    q.choices.forEach((choice, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'big-choice-btn';
+      btn.innerHTML = `
+        <span class="choice-tag">${letters[idx]}</span>
+        <span>${choice.text}</span>
+      `;
+      btn.onclick = () => this.selectAnswer(btn, choice);
+      this.choicesBox.appendChild(btn);
+    });
+
+    // 隱藏反饋與下一題按鈕
+    this.feedbackBox.className = 'mascot-feedback hidden';
+    this.nextBtn.classList.add('hidden');
+  }
+
+  selectAnswer(selectedBtn, choice) {
+    if (this.answeredCurrent) return;
+
+    this.audio.init();
+
+    if (choice.isCorrect) {
+      // 答對了！
+      this.answeredCurrent = true;
+      selectedBtn.classList.add('is-correct');
+      this.audio.playCorrect();
+
+      this.coins += 10;
+      this.streak += 1;
+      this.updateCoinDisplay();
+
+      // 禁用所有按鈕
+      const allBtns = this.choicesBox.querySelectorAll('.big-choice-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      // 顯示稱讚與下一步按鈕
+      const q = QUESTIONS[this.currentIndex];
+      this.feedbackBox.className = 'mascot-feedback success';
+      this.feedbackIcon.innerText = '🎉';
+      this.feedbackText.innerHTML = `<strong>太棒了！</strong> ${q.praise}`;
+      this.feedbackBox.classList.remove('hidden');
+
+      this.nextBtn.classList.remove('hidden');
+      this.nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      // 答錯提示重試
+      selectedBtn.classList.add('is-wrong');
+      this.audio.playWrong();
+
+      const q = QUESTIONS[this.currentIndex];
+      this.feedbackBox.className = 'mascot-feedback hint';
+      this.feedbackIcon.innerText = '💡';
+      this.feedbackText.innerHTML = `<strong>差一點點！</strong> ${q.hint}`;
+      this.feedbackBox.classList.remove('hidden');
+
+      // 允許小二學生再次嘗試
+      setTimeout(() => {
+        selectedBtn.classList.remove('is-wrong');
+      }, 1000);
+    }
+  }
+
+  handleNext() {
+    this.audio.playPop();
+    this.currentIndex++;
+
+    if (this.currentIndex < QUESTIONS.length) {
+      this.loadQuestion();
+    } else {
+      this.finishGame();
+    }
+  }
+
+  finishGame() {
+    this.progressBar.style.width = '100%';
+    this.screenGame.classList.add('hidden');
+    this.screenResult.classList.remove('hidden');
+
+    this.audio.playFanfare();
+    launchConfetti();
+
+    this.finalCoins.innerText = this.coins;
+
+    if (this.coins >= QUESTIONS.length * 10) {
+      this.finalStars.innerText = '⭐⭐⭐';
+      this.finalMessage.innerHTML = '太出色了！你答對了所有關卡，完全掌握了<strong>「善用金錢」</strong>與<strong>「理性消費」</strong>的好習慣，獲頒最高榮譽特工獎狀！';
+    } else {
+      this.finalStars.innerText = '⭐⭐';
+      this.finalMessage.innerHTML = '很棒的表現！你已經懂得很多理財技巧，平時買東西記得多想想「需要」和「預算」喔！';
+    }
+  }
+
+  restart() {
+    this.audio.playPop();
+    this.start();
+  }
+
+  updateCoinDisplay() {
+    this.coinCount.innerText = this.coins;
+  }
+
+  toggleAudio() {
+    this.audio.enabled = !this.audio.enabled;
+    const btn = document.getElementById('audio-toggle-btn');
+    btn.innerText = this.audio.enabled ? '🔊' : '🔇';
+  }
+
+  readCurrentQuestion() {
+    if (!('speechSynthesis' in window)) {
+      alert('抱歉，此瀏覽器未支援語音朗讀功能');
+      return;
+    }
+    window.speechSynthesis.cancel();
+
+    const q = QUESTIONS[this.currentIndex];
+    const fullText = `${q.character}。${q.scenario}。${q.question}`;
+    const utter = new SpeechSynthesisUtterance(fullText);
+    utter.lang = 'zh-HK'; // 優先粵語
+    utter.rate = 0.85; // 放慢語速適合小二學生聆聽
+
+    window.speechSynthesis.speak(utter);
+  }
+}
+
+/* ==================== 4. 內建彩帶特效（通關歡呼） ==================== */
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.offsetWidth;
+  canvas.height = canvas.parentElement.offsetHeight;
+
+  const particles = [];
+  const colors = ['#FF7043', '#4CAF50', '#FFCA28', '#42A5F5', '#AB47BC', '#EC407A'];
+
+  for (let i = 0; i < 70; i++) {
+    particles.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      vx: (Math.random() - 0.5) * 12,
+      vy: (Math.random() - 0.7) * 14,
+      size: Math.random() * 8 + 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      alpha: 1,
+      rotation: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 10
+    });
+  }
+
+  let frames = 0;
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let active = false;
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.35; // 重力
+      p.rotation += p.vRot;
+      p.alpha -= 0.008;
+
+      if (p.alpha > 0) {
+        active = true;
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+        ctx.restore();
+      }
+    });
+
+    frames++;
+    if (active && frames < 140) {
+      requestAnimationFrame(animate);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  animate();
+}
+
+// 實例化遊戲
+const game = new QuizGame();
+</script>
+
+</body>
+</html>
